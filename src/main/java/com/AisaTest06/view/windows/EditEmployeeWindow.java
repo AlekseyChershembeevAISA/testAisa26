@@ -53,6 +53,7 @@ public class EditEmployeeWindow extends Window {
         editEmployee.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         editEmployee.setIcon(VaadinIcons.EDIT);
 
+
         Button cancel = new Button("Отменить", clickEvent -> close());
 
         cancel.setSizeFull();
