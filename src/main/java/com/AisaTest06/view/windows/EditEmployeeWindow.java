@@ -39,8 +39,6 @@ public class EditEmployeeWindow extends Window {
 
         EmployeeDao employeeDao = new EmployeeDaoImpl();
 
-
-
         final String[] fullNameArr = {employee.getFullName()};
         final String[] dateArr = {employee.getBirthDate()};
         final String[] emailArr = {employee.getEmail()};
@@ -52,7 +50,6 @@ public class EditEmployeeWindow extends Window {
         editEmployee.setSizeFull();
         editEmployee.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         editEmployee.setIcon(VaadinIcons.EDIT);
-
 
         Button cancel = new Button("Отменить", clickEvent -> close());
 
@@ -72,6 +69,7 @@ public class EditEmployeeWindow extends Window {
          /*
         Заполняем константу даты рождения сотрудника из поля
         */
+
         dateField.addValueChangeListener(
                 (HasValue.ValueChangeListener<LocalDate>) valueChangeEvent -> {
                     LocalDate date = valueChangeEvent.getValue();
@@ -86,12 +84,14 @@ public class EditEmployeeWindow extends Window {
         /*
         Заполняем константу email сотрудника из поля
         */
+
         email.addValueChangeListener(
                 (HasValue.ValueChangeListener<String>) valueChangeEvent ->
                         emailArr[0] = valueChangeEvent.getValue());
         /*
         Заполняем константу имени сотрудника из поля
         */
+
         fullName.addValueChangeListener(
                 (HasValue.ValueChangeListener<String>) valueChangeEvent ->
                         fullNameArr[0] = valueChangeEvent.getValue());
@@ -101,6 +101,7 @@ public class EditEmployeeWindow extends Window {
         /*
          Редактируем сотрудника, если заполнены все поля
         */
+
         editEmployee.addClickListener((Button.ClickListener) clickEvent13 -> {
 
             try {
