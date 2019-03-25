@@ -1,6 +1,7 @@
 package com.AisaTest06.view.components.textfields;
 
 
+import com.AisaTest06.check.fields.CheckMail;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
@@ -10,12 +11,9 @@ import java.util.logging.Logger;
 
 
 
-@SuppressWarnings("ALL")
+public class FieldsEmployee extends TextField {
 
-
-public class fieldsEmployee extends TextField {
-
-    private static Logger logger = Logger.getLogger(fieldsEmployee.class.getName());
+    private static Logger logger = Logger.getLogger(FieldsEmployee.class.getName());
 
     private TextField emailTextField;
 
@@ -64,12 +62,10 @@ public class fieldsEmployee extends TextField {
         emailTextField = new TextField("email");
         emailTextField.setSizeFull();
         emailTextField.addValueChangeListener(event -> {
-            String emailTextField_PATTERN =
-                    "^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@" +
-                            "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 
-            if (!event.getValue().matches(emailTextField_PATTERN)) {
+
+            if (!CheckMail.isValidPhone(event.getValue())) {
                 emailTextField.setComponentError(new UserError("Нужен email"));
             }
             else if (!(event.getValue().length()>0)){

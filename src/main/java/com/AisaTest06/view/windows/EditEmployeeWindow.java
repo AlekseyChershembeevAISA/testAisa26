@@ -1,10 +1,11 @@
 package com.AisaTest06.view.windows;
 
+import com.AisaTest06.check.fields.CheckMail;
 import com.AisaTest06.dao.EmployeeDaoImpl;
 import com.AisaTest06.dao.dao.interfaces.EmployeeDao;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.layouts.MainLayout;
-import com.AisaTest06.view.components.textfields.fieldsEmployee;
+import com.AisaTest06.view.components.textfields.FieldsEmployee;
 import com.vaadin.data.HasValue;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
@@ -19,6 +20,8 @@ public class EditEmployeeWindow extends Window {
 
     private static Logger logger = Logger.getLogger(EditEmployeeWindow.class.getName());
 
+
+
     public EditEmployeeWindow(Employee employee) {
         setStyleName("Редактировать сотрудника");
         VerticalLayout editVerticalLayout = new VerticalLayout();
@@ -32,7 +35,7 @@ public class EditEmployeeWindow extends Window {
         setHeight(350f, Unit.PIXELS);
         setResizeLazy(false);
 
-        fieldsEmployee fieldsEmployee = new fieldsEmployee();
+        FieldsEmployee fieldsEmployee = new FieldsEmployee();
         TextField fullName = fieldsEmployee.getFullName();
         DateField dateField = fieldsEmployee.getDateField();
         TextField email = fieldsEmployee.getEmailTextField();
@@ -112,12 +115,13 @@ public class EditEmployeeWindow extends Window {
                 employee.setFullName(fullNameArr[0]);
 
 
-                if (!(fullNameArr[0].isEmpty() || dateArr[0].isEmpty() ||
-                        emailArr[0].isEmpty() || companyNameArr[0].isEmpty())) {
+                if (!((fullNameArr[0].isEmpty() || dateArr[0].isEmpty()
+                        || !CheckMail.isValidPhone(emailArr[0]) || companyNameArr[0].isEmpty()))) {
 
                     employeeDao.editEmployee(employee);
-                    MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
-                    MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
+
+                    MainLayout.employeeGrid.setItems(employeeDao.selectAllEmployees());
+
                     close();
 
                 } else {

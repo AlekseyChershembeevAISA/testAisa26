@@ -69,8 +69,9 @@ public class DeleteEmployeeWindow extends Window {
                 for (int i = 0; i < employeeSet.size(); i++) {
                     if (!employeeArrayList.isEmpty()) {
                         employeeDao.deleteEmployee(employeeArrayList.get(i).getEmployeeId());
-                        MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
-                        MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
+
+                        MainLayout.employeeGrid.setItems(employeeDao.selectAllEmployees());
+
                         close();
 
                         logger.info("сотрудник  успешно удален " + employeeArrayList.get(i));

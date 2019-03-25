@@ -51,6 +51,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
             logger.warning("Ошибка при добавлении нового сотрудника " + d);
 
         }
+        catch (NullPointerException ex){
+            logger.warning("NPE insertEmployee "+ ex);
+        }
     }
 
     private static String DAO_EDIT_EMPLOYEE =
@@ -85,6 +88,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
             logger.warning("Ошибка при изменении сотрудника " + d);
 
         }
+        catch (NullPointerException ex){
+            logger.warning("NPE editEmployee "+ ex);
+        }
 
     }
 
@@ -113,6 +119,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
             logger.warning("Ошибка при изменении сотрудника " + d);
 
         }
+        catch (NullPointerException ex){
+            logger.warning("NPE editEmployeeName "+ ex);
+        }
 
     }
 
@@ -138,6 +147,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
             logger.warning("Ошибка при удалении сотрудника " + d);
 
         }
+        catch (NullPointerException ex){
+            logger.warning("deleteEmployee "+ ex);
+        }
 
 
     }
@@ -158,15 +170,18 @@ public class EmployeeDaoImpl implements EmployeeDao {
         } catch (DataAccessException d) {
             logger.warning("Ошибка при добавлении сотрудников " + d);
             return null;
+        }catch (NullPointerException ex){
+            logger.warning("NPE selectAllEmployees "+ ex);
+            return null;
         }
 
 
     }
 
-    private static String DAO_SEARCH_ALL_EMPLOYEES(String search) {
+    private static String dao_search_all_employees(String search) {
         String filterLike = "" + "'%" + search + "%' ";
 
-        return "select*from employees where " +
+        return "select employeeid, fullname, birthdate, email, companyid, namecompany from employees where " +
                 "fullname like " +
                 filterLike +
                 "or birthdate like " +
@@ -194,7 +209,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 employee.setNameCompany(employee.getNameCompany());
 
 
-                listEmployee = jdbcTemplate.query(DAO_SEARCH_ALL_EMPLOYEES(search), new EmployeeRowMapper());
+                listEmployee = jdbcTemplate.query(dao_search_all_employees(search), new EmployeeRowMapper());
 
                 logger.info("Успешно найдены искомые сотрудники по строке " + search);
                 return listEmployee;
@@ -204,6 +219,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
             }
         } catch (DataAccessException d) {
             logger.warning("Ошибка при поиске сотрудника по строке " + d);
+            return null;
+        }
+        catch (NullPointerException ex){
+            logger.warning("searchAllEmployees "+ ex);
             return null;
         }
     }

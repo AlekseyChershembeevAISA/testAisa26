@@ -1,21 +1,23 @@
 package com.AisaTest06.entity;
 
+
 import java.util.Objects;
 
 @SuppressWarnings("ALL")
 public class Company {
     private int companyId;
     private String name;
-    private long nip;
+    //  private long nip;
+    private String nip;
     private String address;
-    private long phone;
+    //  private long phone;
+    private String phone;
 
     public Company() {
 
     }
 
-
-    public Company(int companyId, String name, long nip, String address, long phone) {
+    public Company(int companyId, String name, String nip, String address, String phone) {
         this.companyId = companyId;
         this.name = name;
         this.nip = nip;
@@ -23,34 +25,8 @@ public class Company {
         this.phone = phone;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Company company = (Company) o;
-        return companyId == company.companyId &&
-                nip == company.nip &&
-                phone == company.phone &&
-                Objects.equals(name, company.name) &&
-                Objects.equals(address, company.address);
+    public Company(String name, String nip, String address, String phone) {
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(companyId, name, nip, address, phone);
-    }
-
-    @Override
-    public String toString() {
-        return "Company{" +
-                "companyId=" + companyId +
-                ", name='" + name + '\'' +
-                ", nip=" + nip +
-                ", address='" + address + '\'' +
-                ", phone=" + phone +
-                '}';
-    }
-
 
     public int getCompanyId() {
         return companyId;
@@ -60,7 +36,7 @@ public class Company {
         this.companyId = companyId;
     }
 
-    public String getName() {
+    public java.lang.String getName() {
         return name;
     }
 
@@ -68,12 +44,48 @@ public class Company {
         this.name = name;
     }
 
-    public long getNip() {
+    @Override
+    public java.lang.String toString() {
+        return "Company{" +
+                "companyId=" + companyId +
+                ", name=" + name +
+                ", nip=" + nip +
+                ", address=" + address +
+                ", phone=" + phone +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company company = (Company) o;
+        return companyId == company.companyId &&
+                Objects.equals(name, company.name) &&
+                Objects.equals(nip, company.nip) &&
+                Objects.equals(address, company.address) &&
+                Objects.equals(phone, company.phone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(companyId, name, nip, address, phone);
+    }
+
+    public String getNip() {
         return nip;
     }
 
-    public void setNip(long nip) {
+    public void setNip(String nip) {
         this.nip = nip;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getAddress() {
@@ -83,12 +95,6 @@ public class Company {
     public void setAddress(String address) {
         this.address = address;
     }
-
-    public long getPhone() {
-        return phone;
-    }
-
-    public void setPhone(long phone) {
-        this.phone = phone;
-    }
 }
+
+

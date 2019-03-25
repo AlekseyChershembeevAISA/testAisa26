@@ -22,7 +22,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<!-- If there are no local customizations, this can also be "fetch" or "cdn" -->
 		<vaadin.widgetset.mode>local</vaadin.widgetset.mode>
-		<jetty.http.port>8080</jetty.http.port>
+		<jetty.http.port>7777</jetty.http.port>
 	</properties>
 
 	<repositories>
@@ -153,7 +153,7 @@
 					<scanIntervalSeconds>2</scanIntervalSeconds>
 					<httpConnector>
 						<!--host>localhost</host-->
-						<port>8080</port>
+						<port>7777</port>
 					</httpConnector>
 				</configuration>
 			</plugin>

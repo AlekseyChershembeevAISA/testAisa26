@@ -1,21 +1,22 @@
 package com.AisaTest06.view.components.textfields;
 
 
+import com.AisaTest06.check.fields.CheckNIP;
+import com.AisaTest06.check.fields.CheckPhone;
 import com.vaadin.server.UserError;
 import com.vaadin.ui.TextField;
 
 import java.util.logging.Logger;
 
-@SuppressWarnings("ALL")
-public class fieldsCompany extends TextField {
+public class FieldsCompany extends TextField {
 
-    private static Logger logger = Logger.getLogger(fieldsCompany.class.getName());
+    private static Logger logger = Logger.getLogger(FieldsCompany.class.getName());
 
 
     private TextField nipTextField;
     private TextField phoneTextField;
 
-    public fieldsCompany() {
+    public FieldsCompany() {
 
     }
     /*
@@ -61,7 +62,7 @@ public class fieldsCompany extends TextField {
         phoneTextField = new TextField("Телефон");
         phoneTextField.setSizeFull();
         phoneTextField.addValueChangeListener(event -> {
-            if (!event.getValue().matches("\\d+")) {
+            if (!CheckPhone.isValidPhone(event.getValue())) {
                 phoneTextField.setComponentError(
                         new UserError("Должны быть цифры"));
             } else {
@@ -78,9 +79,9 @@ public class fieldsCompany extends TextField {
         nipTextField = new TextField("ИНН");
         nipTextField.setSizeFull();
         nipTextField.addValueChangeListener(event -> {
-            if (event.getValue().length() != 12 || !event.getValue().matches("\\d+")) {
+            if (!CheckNIP.isValidINN(event.getValue())) {
                 nipTextField.setComponentError(
-                        new UserError("Должно быть 12 цифр"));
+                        new UserError("Необходим ИНН от 10 до 12 цифр"));
             } else {
                 nipTextField.setComponentError(null);
 

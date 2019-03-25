@@ -1,21 +1,24 @@
 package com.AisaTest06.view.windows;
 
+import com.AisaTest06.check.fields.CheckNIP;
+import com.AisaTest06.check.fields.CheckPhone;
 import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.EmployeeDaoImpl;
 import com.AisaTest06.dao.dao.interfaces.CompanyDao;
 import com.AisaTest06.dao.dao.interfaces.EmployeeDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.view.components.layouts.MainLayout;
-import com.AisaTest06.view.components.textfields.fieldsCompany;
+import com.AisaTest06.view.components.textfields.FieldsCompany;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.shared.ui.ValueChangeMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.logging.Logger;
-
-import static com.AisaTest06.view.components.layouts.MainLayout.*;
 
 @SuppressWarnings("ALL")
 public class EditCompanyWindow extends Window {
@@ -49,7 +52,7 @@ public class EditCompanyWindow extends Window {
         Button cancel = new Button("Отменить",clickEvent -> close());
 
         cancel.setSizeFull();
-        fieldsCompany fieldsCompany = new fieldsCompany();
+        FieldsCompany fieldsCompany = new FieldsCompany();
 
         TextField nameField = fieldsCompany.getFullNameTextField();
         nameField.setValueChangeMode(ValueChangeMode.EAGER);
@@ -124,25 +127,24 @@ public class EditCompanyWindow extends Window {
 
                 company.setCompanyId(companyidArr[0]);
                 company.setName(nameArr[0]);
-                company.setNip(Long.parseLong(NIPArr[0]));
+                company.setNip(NIPArr[0]);
                 company.setAddress(addressArr[0]);
-                company.setPhone(Long.parseLong(phoneArr[0]));
+                company.setPhone(phoneArr[0]);
 
-                if (companyDao.checkCompanyByName(company.getName())) {
-                    logger.warning("Компания с таким именем уже существует " + company.getName());
+//                if
+//                (companyDao.checkCompanyByName(company.getName())) {
+//                    logger.warning("Компания с таким именем уже существует " + company.getName());
+//
+//                } else
 
-                } else
-
-                if (!(nameArr[0].isEmpty() ||( NIPArr[0].isEmpty()||NIPArr[0].length()<12)
-                        || addressArr[0].isEmpty() || phoneArr[0].isEmpty())) {
+                if (!(nameArr[0].isEmpty()||(!CheckNIP.isValidINN(NIPArr[0]))
+                        || addressArr[0].isEmpty() || !CheckPhone.isValidPhone(phoneArr[0]))) {
 
                     companyDao.editCompany(company);
                     ((EmployeeDaoImpl) employeeDao).editEmployeeName(company);
 
+                    MainLayout.companyGrid.setItems(companyDao.selectAllCompanies());
 
-
-                    MainLayout.tabSheet.setSelectedTab(tabEmployee);
-                    MainLayout.tabSheet.setSelectedTab(tabCompany);
                     close();
                 } else {
                     fieldsCompany.check(nameField);

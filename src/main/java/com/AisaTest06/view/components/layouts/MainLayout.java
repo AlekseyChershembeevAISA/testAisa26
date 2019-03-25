@@ -27,6 +27,10 @@ public class MainLayout extends VerticalLayout {
     public static final HorizontalLayout tabCompany = new HorizontalLayout();
     public static final HorizontalLayout tabEmployee = new HorizontalLayout();
 
+
+    public static Grid<Company> companyGrid = Grids.gridCompanies();
+    public static Grid<Employee> employeeGrid = Grids.gridEmployees();
+
     public MainLayout() {
 
         CompanyDao companyDao = new CompanyDaoImpl();
@@ -37,11 +41,10 @@ public class MainLayout extends VerticalLayout {
 
         HeadLayout headLayout = new HeadLayout();
 
-        Grids grids = new Grids();
 
 
-        Grid<Company> companyGrid = Grids.gridCompanies();
-        Grid<Employee> employeeGrid = grids.gridEmployees();
+
+
 
         companyGrid.setSizeFull();
         employeeGrid.setSizeFull();

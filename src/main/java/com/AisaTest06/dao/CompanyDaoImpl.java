@@ -48,6 +48,9 @@ public class CompanyDaoImpl implements CompanyDao {
             logger.warning("Ошибка при добавлении новой компании " + d);
 
         }
+        catch (NullPointerException ex){
+            logger.warning("NPE insert company "+ ex);
+        }
     }
 
     private static final String DAO_EDIT_COMPANY =
@@ -78,6 +81,9 @@ public class CompanyDaoImpl implements CompanyDao {
             System.out.println("Ошибка при изменении компании " + d);
 
         }
+        catch (NullPointerException ex){
+            logger.warning("NPE editComapny "+ ex);
+        }
     }
 
     private static final String DAO_DELETE_COMPANY =
@@ -89,18 +95,20 @@ public class CompanyDaoImpl implements CompanyDao {
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         int result;
+        if (companyid!=0) {
 
-        try {
-            parameters.addValue("companyid", companyid);
+            try {
+                parameters.addValue("companyid", companyid);
 
-            result = jdbcTemplate.update(DAO_DELETE_COMPANY, parameters);
+                result = jdbcTemplate.update(DAO_DELETE_COMPANY, parameters);
 
-            logger.info("Успешно удалена компания " + companyid);
+                logger.info("Успешно удалена компания " + companyid);
 
 
-        } catch (DataAccessException d) {
-            logger.warning("Ошибка при удалении компании " + d);
+            } catch (DataAccessException d) {
+                logger.warning("Ошибка при удалении компании " + d);
 
+            }
         }
     }
 
@@ -124,6 +132,12 @@ public class CompanyDaoImpl implements CompanyDao {
             logger.warning("Ошибка при добавлении компаний " + d);
             return null;
         }
+        catch (NullPointerException ex){
+            logger.warning("NPE selectAllCompanies " + ex);
+            return null;
+
+        }
+
 
     }
 
@@ -133,14 +147,14 @@ public class CompanyDaoImpl implements CompanyDao {
     private static String dao_search_all_companies(String search) {
         String filterLike = "" + "'%" + search + "%' ";
 
-        return "select*from companies where " +
+        return "select companyid, name, nip, address, phone from companies where " +
                 "name like " +
                 filterLike +
-                "or cast(nip as varchar) like " +
+                "or nip like " +
                 filterLike +
                 "or address like " +
                 filterLike +
-                "or cast (phone as varchar) like " +
+                "or phone like " +
                 filterLike;
     }
 
@@ -188,10 +202,14 @@ public class CompanyDaoImpl implements CompanyDao {
         parametres.addValue("name", name);
 
         try {
-            return jdbcTemplate.queryForObject(DAO_CHECK_COMPANY_BY_NAME, parametres, Boolean.class);
+            return jdbcTemplate.queryForObject(DAO_CHECK_COMPANY_BY_NAME, parametres, Integer.class)>0;
 
         } catch (DataAccessException ex) {
             logger.warning("Ошибка при проверке компании по имени " + ex);
+            return false;
+        }
+        catch (NullPointerException ex){
+            logger.warning("NPE checkCompanyByName" + ex);
             return false;
         }
 

@@ -10,8 +10,8 @@ namecompany varchar(80)
 create table companies(
 companyid serial primary key,
 name varchar(80),
-nip bigint,
+nip varchar(12),
 address varchar(80),
-phone bigint
+phone varchar (20)
 );
 

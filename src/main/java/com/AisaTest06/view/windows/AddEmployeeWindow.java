@@ -1,6 +1,7 @@
 package com.AisaTest06.view.windows;
 
 
+import com.AisaTest06.check.fields.CheckMail;
 import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.EmployeeDaoImpl;
 import com.AisaTest06.dao.dao.interfaces.CompanyDao;
@@ -8,7 +9,7 @@ import com.AisaTest06.dao.dao.interfaces.EmployeeDao;
 import com.AisaTest06.entity.Company;
 import com.AisaTest06.entity.Employee;
 import com.AisaTest06.view.components.layouts.MainLayout;
-import com.AisaTest06.view.components.textfields.fieldsEmployee;
+import com.AisaTest06.view.components.textfields.FieldsEmployee;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -51,6 +52,7 @@ public class AddEmployeeWindow extends Window {
         selectAllCompanies.setWidth(78,Unit.PERCENTAGE);
 
         Button addEmployee = new com.vaadin.ui.Button("Добавить");
+        addEmployee.setSizeFull();
         addEmployee.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
         addEmployee.setStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -61,7 +63,7 @@ public class AddEmployeeWindow extends Window {
 
         cancel.setSizeFull();
 
-        fieldsEmployee fieldsEmployee = new fieldsEmployee();
+        FieldsEmployee fieldsEmployee = new FieldsEmployee();
 
         TextField fullNameTextField = fieldsEmployee.getFullName();
         DateField dateField = fieldsEmployee.getDateField();
@@ -113,7 +115,7 @@ public class AddEmployeeWindow extends Window {
         addEmployee.addClickListener((Button.ClickListener) clickEvent6 -> {
 
             if (!((fullNameArr[0].isEmpty() || dateFieldArr[0].isEmpty()
-                    || emailArr[0].isEmpty()) || companyNameArr[0].isEmpty())) {
+                    || !CheckMail.isValidPhone(emailArr[0]) || companyNameArr[0].isEmpty()))) {
 
 
                 Employee employee;
@@ -124,11 +126,13 @@ public class AddEmployeeWindow extends Window {
 
                     if (!(fullNameArr[0].isEmpty() || dateFieldArr[0].isEmpty() ||
                             emailArr[0].isEmpty())) {
+
                         employeeDao.insertEmployee(employee);
-                        MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
-                        MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
+
+                        MainLayout.employeeGrid.setItems(employeeDao.selectAllEmployees());
 
                         close();
+
                     }
                 } catch (NumberFormatException ex) {
                     logger.warning("Неверные данные компании " + ex);

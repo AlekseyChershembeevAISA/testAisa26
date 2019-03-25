@@ -8,19 +8,23 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import static com.AisaTest06.view.windows.UserConfirmation.getBoolean;
+
 
 @SuppressWarnings("ALL")
 public class DeleteCompanyWindow extends Window {
 
     private static Logger logger = Logger.getLogger(DeleteCompanyWindow.class.getName());
-
+    static CompanyDao companyDao;
+    List<Company> companyList;
+    ArrayList<Company> listCompany;
+    Set<Company> companySet;
     public DeleteCompanyWindow() {
 
         setStyleName("Удалить компанию");
@@ -30,9 +34,10 @@ public class DeleteCompanyWindow extends Window {
         setDraggable(false);
         setModal(true);
 
+
         setResizeLazy(false);
 
-        CompanyDao companyDao = new CompanyDaoImpl();
+        companyDao = new CompanyDaoImpl();
 
 
         Button deleteCompanyButton = new Button("Удалить");
@@ -45,7 +50,7 @@ public class DeleteCompanyWindow extends Window {
 
         cancelButton.setSizeFull();
 
-        List<Company> companyList = companyDao.selectAllCompanies();
+        companyList = companyDao.selectAllCompanies();
 
         CheckBoxGroup<Company> selectAllCompanies = new CheckBoxGroup<>("Выбрать компании");
         selectAllCompanies.setSizeFull();
@@ -63,36 +68,66 @@ public class DeleteCompanyWindow extends Window {
 
         selectAllCompanies.addValueChangeListener(valueChangeEvent -> {
 
-            Set<Company> companySet = valueChangeEvent.getValue();
+
+            companySet = valueChangeEvent.getValue();
 
             logger.info("Выбраны компании " + companySet);
 
-            ArrayList<Company> listCompany = new ArrayList<>(companySet);
+            listCompany = new ArrayList<>(companySet);
+            //DeleteEmployeeWindow deleteWindow = new DeleteEmployeeWindow();
+            //                UI.getCurrent().addWindow(deleteWindow);
 
-            deleteCompanyButton.addClickListener(clickEvent -> {
 
-                for (int i = 0; i < companySet.size(); i++) {
-                    if (!listCompany.isEmpty()) {
-                        companyDao.deleteCompany(listCompany.get(i).getCompanyId());
-                        MainLayout.tabSheet.setSelectedTab(MainLayout.tabEmployee);
-                        MainLayout.tabSheet.setSelectedTab(MainLayout.tabCompany);
-                        close();
+        });
 
-                        logger.info("компания успешно удалена " + listCompany.get(i));
-                    } else {
-                        logger.warning("Невозможно удалить компанию");
-                    }
+        deleteCompanyButton.addClickListener(clickEvent -> {
+            try {
+                if (companySet.size()>0) {
+                    UserConfirmation userConfirmation = new UserConfirmation(companySet, listCompany);
+                    UI.getCurrent().addWindow(userConfirmation);
+                    close();
                 }
+                else {
+                    logger.warning("Не выбраны компании в чекбоксе ");
+                }
+            }catch (NullPointerException ex){
+                logger.warning(" NPE deleteCompanyButton "+ ex);
+            }
 
 
 
-            });
+
+
 
 
         });
     }
 
-}
+    public static void deleteListener(Set companySet, List<Company> listCompany) {
+
+        for (int i = 0; i < companySet.size(); i++) {
+            if ((!listCompany.isEmpty())||getBoolean()) {
+
+                companyDao.deleteCompany(listCompany.get(i).getCompanyId());
+                MainLayout.companyGrid.setItems(companyDao.selectAllCompanies());
+
+                logger.info("компания успешно удалена " + listCompany.get(i));
+            } else {
+                logger.warning("Невозможно удалить компанию");
+            }
+        }
+
+
+    }
+
+
+
+
+
+
+    }
+
+
 
 
 

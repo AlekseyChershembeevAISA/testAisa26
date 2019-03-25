@@ -19,9 +19,9 @@ public class CompanyRowMapper implements RowMapper {
         Company company = new Company();
         company.setCompanyId(rs.getInt("companyid"));
         company.setName(rs.getString("name"));
-        company.setNip(rs.getLong("nip"));
+        company.setNip(rs.getString("nip"));
         company.setAddress(rs.getString("address"));
-        company.setPhone(rs.getLong("phone"));
+        company.setPhone(rs.getString("phone"));
         return company;
     }
 }

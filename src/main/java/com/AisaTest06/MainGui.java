@@ -23,6 +23,7 @@ public class MainGui extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+        System.out.println();
 
 
         MainLayout mainLayout = new MainLayout();
