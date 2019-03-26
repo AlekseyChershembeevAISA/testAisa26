@@ -18,6 +18,15 @@ public class DeleteEmployeeWindow extends Window {
 
     private static Logger logger = Logger.getLogger(DeleteEmployeeWindow.class.getName());
 
+
+    //    List<Company> companyList;
+    //    ArrayList<Company> listCompany;
+    //    Set<Company> companySet;
+
+    private Set<Employee> employeeSet;
+    private List<Employee> employeeList;
+    private ArrayList<Employee> employeeArrayList;
+
     public DeleteEmployeeWindow() {
         setStyleName("Удалить сотрудника");
 
@@ -46,42 +55,42 @@ public class DeleteEmployeeWindow extends Window {
         verticalLayout.addComponents(selectAllEmployees, deleteEmployee, cancelButton);
         setContent(verticalLayout);
 
-        List<Employee> employeeList = employeeDao.selectAllEmployees();
+        employeeList = employeeDao.selectAllEmployees();
 
         selectAllEmployees.setItems(employeeList);
         selectAllEmployees.setItemCaptionGenerator(Employee::getFullName);
 
         selectAllEmployees.addValueChangeListener(valueChangeEvent -> {
 
-            Set<Employee> employeeSet = valueChangeEvent.getValue();
-
+           employeeSet = valueChangeEvent.getValue();
 
             logger.info("Выраны сотрудники " + employeeSet);
 
-            ArrayList<Employee> employeeArrayList = new ArrayList<>(employeeSet);
+             employeeArrayList = new ArrayList<>(employeeSet);
 
             /*
              Удаляем выбранных сотрудников из комбобокса по ID сотрудника
             */
 
-            deleteEmployee.addClickListener(clickEvent -> {
 
-                for (int i = 0; i < employeeSet.size(); i++) {
-                    if (!employeeArrayList.isEmpty()) {
-                        employeeDao.deleteEmployee(employeeArrayList.get(i).getEmployeeId());
 
-                        MainLayout.employeeGrid.setItems(employeeDao.selectAllEmployees());
+        });
 
-                        close();
+        deleteEmployee.addClickListener(clickEvent -> {
 
-                        logger.info("сотрудник  успешно удален " + employeeArrayList.get(i));
-                    } else {
-                        logger.warning("Невозможно удалить сотрудника");
-                    }
+            try {
+                if (employeeSet.size()>0) {
+                    UserConfirmationEmployee userConfirmationEmployee =
+                            new UserConfirmationEmployee(employeeSet,employeeArrayList);
+                    UI.getCurrent().addWindow(userConfirmationEmployee);
+                    close();
                 }
-                close();
-            });
-
+                else {
+                    logger.warning("Не выбраны сотрудники в чекбоксе ");
+                }
+            }catch (NullPointerException ex){
+                logger.warning(" NPE deleteEmployee "+ ex);
+            }
         });
 
     }

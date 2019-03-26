@@ -3,7 +3,6 @@ package com.AisaTest06.view.windows;
 import com.AisaTest06.dao.CompanyDaoImpl;
 import com.AisaTest06.dao.dao.interfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
-import com.AisaTest06.view.components.layouts.MainLayout;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
@@ -13,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
-
-import static com.AisaTest06.view.windows.UserConfirmationCompany.getBoolean;
 
 
 @SuppressWarnings("ALL")
@@ -62,9 +59,7 @@ public class DeleteCompanyWindow extends Window {
         verticalLayout.addComponents(selectAllCompanies, deleteCompanyButton, cancelButton);
 
         setContent(verticalLayout);
-        /*
-         Удаляем выбранные компании из комбобокса по ID компании
-        */
+
 
         selectAllCompanies.addValueChangeListener(valueChangeEvent -> {
 
@@ -74,11 +69,14 @@ public class DeleteCompanyWindow extends Window {
             logger.info("Выбраны компании " + companySet);
 
             listCompany = new ArrayList<>(companySet);
-            //DeleteEmployeeWindow deleteWindow = new DeleteEmployeeWindow();
-            //                UI.getCurrent().addWindow(deleteWindow);
+
 
 
         });
+
+        /**
+         * Если в чекбоксе выбраны компании вызываем диалоговое окно
+         * **/
 
         deleteCompanyButton.addClickListener(clickEvent -> {
             try {
@@ -103,22 +101,6 @@ public class DeleteCompanyWindow extends Window {
         });
     }
 
-    public static void deleteListener(Set companySet, List<Company> listCompany) {
-
-        for (int i = 0; i < companySet.size(); i++) {
-            if ((!listCompany.isEmpty())||getBoolean()) {
-
-                companyDao.deleteCompany(listCompany.get(i).getCompanyId());
-                MainLayout.companyGrid.setItems(companyDao.selectAllCompanies());
-
-                logger.info("компания успешно удалена " + listCompany.get(i));
-            } else {
-                logger.warning("Невозможно удалить компанию");
-            }
-        }
-
-
-    }
 
 
 

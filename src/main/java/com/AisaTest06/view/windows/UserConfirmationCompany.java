@@ -1,6 +1,9 @@
 package com.AisaTest06.view.windows;
 
+import com.AisaTest06.dao.CompanyDaoImpl;
+import com.AisaTest06.dao.dao.interfaces.CompanyDao;
 import com.AisaTest06.entity.Company;
+import com.AisaTest06.view.components.layouts.MainLayout;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -16,13 +19,16 @@ class UserConfirmationCompany extends Window {
     private Button yes;
     private Button close;
     private FormLayout formLayout;
-    private static boolean confirmComapny;
+    private boolean confirmDeleteComapny;
+    private CompanyDao companyDao;
 
 
     private static Logger logger = Logger.getLogger(UserConfirmationCompany.class.getName());
 
 
     UserConfirmationCompany(Set<Company> companySet, List<Company> listCompany) {
+
+        companyDao = new CompanyDaoImpl();
 
         setStyleUserConfirmation();
 
@@ -31,15 +37,15 @@ class UserConfirmationCompany extends Window {
         setContent(formLayout);
 
         yes.addClickListener(clickEvent -> {
-            confirmComapny = true;
-            DeleteCompanyWindow.deleteListener(companySet, listCompany);
+            confirmDeleteComapny = true;
+            deleteListener(companySet, listCompany);
             logger.info("Одобрено удаление ");
             close();
 
 
         });
         close.addClickListener(clickEvent -> {
-            confirmComapny = false;
+            confirmDeleteComapny = false;
             logger.info("Удаление отменено");
             close();
         });
@@ -47,8 +53,8 @@ class UserConfirmationCompany extends Window {
     }
 
     /**
-    Инициализируем компоненты UserConfirmationCompany и добавляем и properties
-    **/
+     * Инициализируем компоненты UserConfirmationCompany и добавляем и properties
+     **/
     private void setComponents() {
         label = new Label("Удалить компанию/компании ?");
         yes = new Button("Да");
@@ -74,13 +80,26 @@ class UserConfirmationCompany extends Window {
         setResizeLazy(false);
     }
 
-    static boolean getBoolean() {
-        return confirmComapny;
+    /**
+     * Удаляем выбранные компании из комбобокса по ID компании
+     **/
+    private void deleteListener(Set<Company> companySet, List<Company> listCompany) {
+
+        for (int i = 0; i < companySet.size(); i++) {
+            if ((!listCompany.isEmpty()) || confirmDeleteComapny) {
+
+                companyDao.deleteCompany(listCompany.get(i).getCompanyId());
+                MainLayout.companyGrid.setItems(companyDao.selectAllCompanies());
+
+                logger.info("компания успешно удалена " + listCompany.get(i));
+            } else {
+                logger.warning("Невозможно удалить компанию");
+            }
+        }
+
     }
 
-
-
-
+   
 
 
 }
