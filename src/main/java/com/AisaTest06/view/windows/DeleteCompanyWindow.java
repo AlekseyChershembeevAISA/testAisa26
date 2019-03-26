@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import static com.AisaTest06.view.windows.UserConfirmation.getBoolean;
+import static com.AisaTest06.view.windows.UserConfirmationCompany.getBoolean;
 
 
 @SuppressWarnings("ALL")
@@ -83,8 +83,8 @@ public class DeleteCompanyWindow extends Window {
         deleteCompanyButton.addClickListener(clickEvent -> {
             try {
                 if (companySet.size()>0) {
-                    UserConfirmation userConfirmation = new UserConfirmation(companySet, listCompany);
-                    UI.getCurrent().addWindow(userConfirmation);
+                    UserConfirmationCompany userConfirmationCompany = new UserConfirmationCompany(companySet, listCompany);
+                    UI.getCurrent().addWindow(userConfirmationCompany);
                     close();
                 }
                 else {
